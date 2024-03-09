@@ -6,33 +6,32 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 import pickle
 
 # Load the dataset
-df = pd.read_csv('hive_health_dataset.csv')
+df = pd.read_csv('health_status.csv')
 
-# Extract the 'Timestamp' column and drop it from the features
-timestamps = df['Timestamp']
-X = df.drop(['Hive Health', 'Timestamp'], axis=1)
-y = df['Hive Health']
+# Extract features and target variable
+X = df[['Temperature (Celsius)', 'Humidity (%)', 'Hive Frequency', 'CO2 Concentration (ppm)']]
+y = df['Health Status']
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Standardize the features
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
+# # Standardize the features
+# scaler = StandardScaler()
+# X_train_scaled = scaler.fit_transform(X_train)
+# X_test_scaled = scaler.transform(X_test)
 
 # Create an SVM model with class balancing
 svm_model = SVC(kernel='linear', C=1.0, random_state=42, class_weight='balanced')
 
 # Train the model on the training data
-svm_model.fit(X_train_scaled, y_train)
+svm_model.fit(X_train, y_train)
 
 # Save the trained model to a pickle file
 with open('svm_model.pkl', 'wb') as model_file:
     pickle.dump(svm_model, model_file)
 
 # Predict on the testing data
-y_pred = svm_model.predict(X_test_scaled)
+y_pred = svm_model.predict(X_test)
 
 # Evaluate the model
 accuracy = accuracy_score(y_test, y_pred)
@@ -46,9 +45,7 @@ print(conf_matrix)
 print('\nClassification Report:')
 print(class_report)
 
-targets = {0: 'healthy', 1: 'not healthy'}  # Assuming 'healthy' is 0 and 'not healthy' is 1
-print("\nPredicted and True Labels for the first 10 instances:")
-for i in range(10):
-    predicted_label = y_pred[i]
-    actual_label = y_test.iloc[i]
-    print(f"Predicted: {predicted_label}, Actual: {actual_label}")
+
+y_pred = svm_model.predict([[30.4,59.87,407.35,147.54]])
+print(y_pred)
+

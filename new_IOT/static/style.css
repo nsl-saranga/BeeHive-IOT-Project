@@ -1,0 +1,361 @@
+*{
+    padding: 0;
+    margin:0;
+    box-sizing: border-box;
+    font-family:'poppins', sans-serif;
+}
+.topbar{
+    position: fixed;
+    background: #fff;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08);
+    width: 100%;
+    height: 60px;
+    padding:0 20px;
+    display: grid;
+    grid-template-columns: 2fr 10fr 0.4fr 1fr;
+    align-items: center;
+    z-index: 1;
+}
+
+.logo h2{
+    color:rgb(11, 78, 56);
+}
+
+.search{
+    position: relative;
+    width: 60%;
+    justify-self: center;
+}
+
+.search input{
+    width: 100%;
+    height:40px;
+    padding: 0 40px;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    background: #f5f5f5;
+}
+
+.search i{
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    cursor: pointer;
+
+}
+.user{
+    position: relative;
+    width: 50px;
+    height: 50px;
+}
+
+.user img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+/* sidebar starts here*/
+.sidebar {
+    position: fixed;
+    top: 60px;
+    width: 260px;
+    height: calc(100% - 60px);
+    background: #1F2544;
+    overflow-x: hidden;
+}
+
+.sidebar ul{
+    margin-top: 20px; 
+}
+
+.sidebar ul li{
+    width: 100%;
+    list-style: none;
+}
+.sidebar ul li:hover{
+    background: #fff;
+}
+.sidebar ul li:hover a{
+    color:rgb(215, 188, 8)
+}
+
+
+.sidebar ul li a{
+    width: 100%;
+    text-decoration: none;
+    color:#fff;
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar ul li a i{
+    min-width: 60px;
+    font-size: 24px;
+    text-align: center;
+}
+
+/*main section starts here*/
+.main{
+    position: absolute;
+    top: 60px;
+    width: calc(100% - 260px);
+    left: 260px;
+    min-height: calc(100vh - 60px);
+    background: #f5f5f5;
+}
+
+.cards{
+    width: 100%;
+    padding: 45px 25px;
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    grid-gap: 10px;
+    
+}
+
+.cards .card{
+    padding: 20px;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 7px 25px 0 rgba(0,0, 0, 0.08);
+}
+
+.cards .card:hover{
+    background: rgb(215, 188, 8);   
+}
+
+.cards .card:hover .number{
+    color:#fff
+}
+
+.cards .card:hover .card-name{
+    color:#fff
+}
+
+.cards .card:hover .icon-box i{
+    color:#fff
+}
+
+.number{
+    font-size: 35px;
+    font-weight: 500;
+    color: rgb(215, 188, 8);
+}
+
+.tag{
+    font-size: 25px;
+    font-weight: 500;
+    /* color: rgb(215, 188, 8); */
+}
+
+.hexagon-container {
+    width: 200px; /* Adjust the size as needed */
+    height: 200px; /* (sqrt(3) / 2) * width */
+    background-color: #3498db; /* Adjust the background color */
+    position: relative;
+    margin: 28.87px 0; /* (sqrt(3) / 2) * height / 2 */
+    text-align:end;
+
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    /* The clip-path property defines the hexagon shape */
+  }
+
+.hexa-text{
+    width:100%;
+    height: 100%;
+    padding: 35px;
+}
+
+.card-name{
+    color: #888 ;
+    font-weight: 600;
+    font-size: 20px;
+    text-align: center;
+}
+
+.icon-box i{
+    font-size: 45px;
+    color: rgb(215, 188, 8);
+}
+
+/*charts starts here*/
+.charts{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 20px;
+    width: 100%;
+    padding: 20px;
+    padding-top: 0;
+}
+
+.chart{
+    background:#fff ;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow:0 7px 25px rgba(0,0,0,0.08);
+    width: 100%;
+}
+
+.chart h2{
+    margin-bottom: 5px;
+    font-size: 20px;
+    color: #666;
+    text-align: center;
+}
+
+/*Responsive starts here*/
+@media(max-width:1115px){
+    .sidebar{
+        width: 60px;
+    }
+    .main{
+        left: 60px;
+        width:calc(100% - 60px);
+    }      
+}
+
+@media(max-width:880px){
+    .cards{
+        grid-template-columns: repeat(2,1fr);
+    }
+    .charts{
+        grid-template-columns: 1fr;
+    }
+    
+    #doughnut-chart{
+        padding: 50px;
+    }
+    #doughnut{
+        padding: 50px;
+    }
+}
+
+@media(max-width:500px){
+    .topbar{
+        grid-template-columns: 1fr 5fr 0.4fr 1fr;
+    }
+    .cards{
+        grid-template-columns: 1fr;
+    }
+    .logo h2{
+        font-size: 20px;
+    }
+    .search{
+        width:80%;
+    }
+    .search input{
+        padding: 0 20px;
+    }
+    .fa-bell{
+        margin-right: 5px;
+    }
+    .user{
+        width: 40px;
+        height: 40px;
+    }
+    #doughnut-chart{
+        padding: 10px;
+    }
+    #doughnut{
+        padding: 0;
+    }
+}
+
+.hexagon-container {
+    position: relative;
+    width: 200px; /* Adjust the size as needed */
+    height: 230px; /* (sqrt(3) / 2) * width */
+    background-color: goldenrod; /* Adjust the background color */
+    margin: 57.75px 0; /* (sqrt(3) / 2) * height / 2 */
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    margin: 13px;
+    margin-bottom: 0%;
+  }
+  
+  .hexagon-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+  }
+  
+  .hexagon-content h3 {
+    margin-bottom: 10px;
+    font-size: 1.5rem}
+  
+  .hexagon-content p {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .container-all{
+    display: flex;
+    justify-content: flex-start;
+    margin-left:2em;
+    
+  }
+
+  .bar-container{
+    position: relative;
+    /* width: 400px; */
+    padding: 0%;
+    
+   
+   
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 20px;
+    margin-top: 10px;
+    
+    
+}
+.progress-circular{
+    
+    position: relative;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background:conic-gradient(goldenrod 30deg, #ededed 0deg) ;
+    display: flex;
+    justify-content: center;
+    align-items: center  ;
+    
+}
+.progress-circular::after{
+    position: absolute;
+    content: '';
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: #fff;
+}
+.value{
+    font-size: 40px;
+    font-weight: 600;
+    color: goldenrod;
+    z-index:9;
+}
+.text{
+    font-size: 20px;
+    font-weight: 600;
+    color: goldenrod; 
+    margin: 20px 0;
+}
+
+.live_tag{
+    margin-left: 2em;
+}

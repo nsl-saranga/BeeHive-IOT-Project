@@ -1,0 +1,206 @@
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Admin Panel</title>
+</head>
+<body>
+   <div class="container"> 
+    <div class="topbar">
+        <div class="logo">
+            <h2>Hives</h2>
+        </div>
+        <div class="search">
+            <input type="text" id="search" placeholder="search here">
+            <label for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
+        </div>
+        <i class="fa-solid fa-bell"></i>
+        <div class="user">
+         <img src="{{ url_for('static', filename='images/a.jpg') }}" alt="">
+        </div>
+    </div>
+    <div class="sidebar">
+       <ul>
+          <li>
+             <a href="#">
+                <i class="fa-solid fa-chess-board"></i>
+                <div>Dashboard</div>
+             </a>
+          </li>
+          <li>
+            <a href="#">
+                <i class="fa fa-graduation-cap"></i>
+               <div>Students</div>
+            </a>
+         </li>
+         <li>
+            <a href="#">
+                <i class="fas fa-chalkboard-teacher"></i>
+               <div>Lecturers</div>
+            </a>
+         </li>
+         <li>
+            <a href="#">
+                <i class="fa fa-user"></i>
+               <div>Employees</div>
+            </a>
+         </li>
+        
+         <li>
+            <a href="#">
+                <i class="fas fa-chart-bar"></i>
+               <div>Analytics</div>
+            </a>
+         </li>
+         <li>
+            <a href="#">
+                <i class="fa fa-cog"></i>
+               <div>Settings</div>
+            </a>
+         </li>
+         <li>
+            <a href="#">
+                <i class="fa fa-question-circle" ></i>
+               <div>Help</div>
+            </a>
+         </li>
+       </ul>
+      </div>
+    <div class="main">
+        <div class="cards">
+            <div class="card">
+               <div class="card-content">
+                  <div class="number">{{swarming_alert}}</div>
+                  <div class="card-name">Harvest</div>
+               </div>
+               <div class="icon-box">
+                 <i class="fa-regular fa-triangle-exclamation"></i>
+               </div>
+            </div>
+            <div class="card" id="swarm_card" data-swarming-alert="{{ swarming_alert }}">
+               <div class="card-content">
+                   <div class="card-name" id="swarm_card_name"></div>
+               </div>
+               <div class="icon-box" id="swarm_card_icon">
+               </div>
+           </div>
+           
+            <div class="card" id="rain_card" data-feeding-alert="{{ feeding_need}}">
+               <div class="card-content">
+                  <div class="card-name" id="rain_card_name"></div>
+               </div>
+               <div class="icon-box" id = "rain_card_icon">
+               </div>
+            </div>
+
+            <div class="card" id="health_card" health-alert="{{prediction}}">
+               <div class="card-content">
+                  <div class="card-name" id="health_card_name"></div>
+               </div>
+               <div class="icon-box" id = "health_card_icon">
+               </div>
+            </div>
+
+            <div class="card">
+               <div class="card-content">
+                  <div class="number">0</div>
+                  <div class="card-name">{{ prediction[0]}}</div>
+               </div>
+               <div class="icon-box">
+                  <i class="fa-light fa-honey-pot"></i>
+               </div>
+            </div>
+        </div>
+        
+        <h2 class="live_tag">Live</h2>
+
+        <div class="container-all" id ="live-data" live-data={{live_data}}>
+         <div class="hexagon-container">
+            <div class="hexagon-content">
+                <p>Inside Temperature</p>
+                <h3 >{{ live_data.live_in_temperature }} °C<span id="in_temp_span"></span></h3>
+                <p >Outside Temperature</p>
+                <h3 id="out_temp">{{ live_data.live_out_temperature}} °C</h3>
+            </div>
+         </div>
+   
+         <div class="hexagon-container">
+            <div class="hexagon-content">
+                <p>Inside Humidity</p>
+                <h3>{{live_data.live_in_humidity}} %</h3>
+                <p>Outside Humidity</p>
+                <h3>{{live_data.live_out_humidity}} %</h3>
+            </div>
+         </div>
+   
+         <div class="hexagon-container">
+            <div class="hexagon-content">
+                <p id="out_temp">Frequency</p>
+                <h3 id="in_temp">{{ live_data.live_frequency}} Hz</h3>
+            </div>
+         </div>
+         <div class="hexagon-container">
+            <div class="hexagon-content">
+                <p id="out_temp">Co2 Concentration</p>
+                <h3 id="in_temp">{{ live_data.live_out_temperature }}</h3>
+            </div>
+         </div>
+    
+         <div class="bar-container">
+            <div class="progress-circular">
+                <span class="value"> 0% </span>
+            </div>
+            <div class="text">Hive Weight</div>
+        </div>
+    
+         
+    
+
+        </div>
+        
+
+        
+
+  
+         
+      
+
+      
+    
+        <!-- <div class="charts">
+          <div class="chart">
+             <h2>Inside temperature variation (last 3 months)</h2>
+             <canvas id="lineChart"></canvas>
+          </div>
+          <div class="chart" id="doughnut-chart">
+            <h2>Production</h2>
+            <canvas id="doughnut"></canvas>
+          </div>
+         </div> 
+        
+      </div>
+    
+   </div> -->
+
+
+   <!-- <script>
+      // Retrieve the binary value from Flask passed to the template
+      var binaryValue = { swarming_alert };
+
+      // Call a function from the external script to handle the logic
+      handleColorChange(binaryValue);
+  </script> -->
+   <script>
+      var prediction = "{{ prediction[0] }}"; 
+   // Access the value from Flask
+   </script>
+   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+   <script src="{{ url_for('static', filename='chart1.js') }}"></script>
+   <script src="{{ url_for('static', filename='chart2.js') }}"></script>
+   <script src="{{ url_for('static', filename='script.js') }}"></script>
+   
+</body>
+</html>

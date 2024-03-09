@@ -1,47 +1,74 @@
-import numpy as np
 import pandas as pd
+import numpy as np
+from datetime import datetime, timedelta
 
-# Set random seed for reproducibility
+# Set seed for reproducibility
 np.random.seed(42)
 
-# Number of data points
-num_samples = 1000
+# Number of rows in the dataset
+num_rows = 1000
 
-# Generate synthetic data for temperature, humidity, frequency, CO2 level, and sound intensity
-temperature = np.random.uniform(30, 40, num_samples)
-humidity = np.random.uniform(40, 80, num_samples)
-frequency = np.random.uniform(80, 120, num_samples)
-co2_level = np.random.uniform(300, 500, num_samples)
-sound_intensity = np.random.uniform(60, 90, num_samples)
+# Generate timestamp starting from a specific date and time
+start_time = datetime(2024, 3, 9, 8, 0, 0)
+timestamps = [start_time + timedelta(hours=i) for i in range(num_rows)]
 
-# Assume a simple relationship between features and health status
-# Adjust this based on the characteristics you want in your synthetic data
-health_status = np.where(
-    (temperature > 35) & (humidity > 50) & (frequency > 90) & (co2_level < 450) & (sound_intensity > 70),
-    1, 0
-)
-
-# Randomly select some instances with health_status = 1 to balance the classes
-indices_positive_class = np.where(health_status == 1)[0]
-num_samples_positive_class = int(0.5 * num_samples)  # Assuming a 50-50 balance
+# Generate random data within specified ranges, rounded to 2 decimal points
+temperature = np.round(np.random.uniform(28, 35, num_rows), 2)
+humidity = np.round(np.random.uniform(50, 60, num_rows), 2)
+co2_concentration = np.round(np.random.uniform(390, 450, num_rows), 2)
+hive_frequency = np.round(np.random.normal(150, 5, num_rows), 2)
 
 # Create a DataFrame
-synthetic_data = pd.DataFrame({
-    'Temperature': temperature,
-    'Humidity': humidity,
-    'Frequency': frequency,
-    'CO2 Level': co2_level,
-    'Sound Intensity': sound_intensity,
-    'Hive Health': 0  # Initialize with all 0s
-})
+data = {
+    'Timestamp': timestamps,
+    'Temperature (Celsius)': temperature,
+    'Humidity (%)': humidity,
+    'CO2 Concentration (ppm)': co2_concentration,
+    'Hive Frequency': hive_frequency
+}
 
-# If there are not enough instances with health_status = 1, adjust the number of samples
-if len(indices_positive_class) < num_samples_positive_class:
-    num_samples_positive_class = len(indices_positive_class)
+df = pd.DataFrame(data)
+df['Health Status'] = 'Healthy'
 
-# Update health_status for the selected positive class instances
-selected_indices_positive_class = np.random.choice(indices_positive_class, num_samples_positive_class, replace=True)
-synthetic_data.loc[selected_indices_positive_class, 'Hive Health'] = 1
+# Set seed for reproducibility
+np.random.seed(42)
 
-# Save the synthetic data to a CSV file
-synthetic_data.to_csv('synthetic_hive_data.csv', index=False)
+# Number of rows in the dataset
+num_rows = 1000
+
+# Generate timestamp starting from a specific date and time
+start_time = datetime(2024, 3, 9, 8, 0, 0)
+timestamps = [start_time + timedelta(hours=i) for i in range(num_rows)]
+
+# Generate random data with abnormal conditions, rounded to 2 decimal points
+temperature = np.concatenate([np.round(np.random.uniform(10, 27.9, num_rows // 2), 2),
+                              np.round(np.random.uniform(35.1, 40, num_rows // 2), 2)])
+humidity = np.concatenate([np.round(np.random.uniform(30, 49.9, num_rows // 2), 2),
+                           np.round(np.random.uniform(60.1, 80, num_rows // 2), 2)])
+co2_concentration = np.round(np.random.uniform(450, 800, num_rows), 2)
+hive_frequency = np.concatenate([np.round(np.random.normal(180, 20, num_rows // 2), 2),
+                                 np.round(np.random.normal(210, 30, num_rows // 2), 2)])
+
+# Create a DataFrame
+data = {
+    'Timestamp': timestamps,
+    'Temperature (Celsius)': temperature,
+    'Humidity (%)': humidity,
+    'CO2 Concentration (ppm)': co2_concentration,
+    'Hive Frequency': hive_frequency
+}
+
+unhealthy_df = pd.DataFrame(data)
+unhealthy_df['Health Status'] = 'Unhealthy'
+result_df = pd.concat([df, unhealthy_df], ignore_index=True)
+
+# Shuffle the rows of the DataFrame
+shuffled_df = result_df.sample(frac=1, random_state=42).reset_index(drop=True)
+
+# Display the shuffled DataFrame
+print(shuffled_df)
+
+csv_file_path = 'health_status.csv'
+
+# Write the DataFrame to a CSV file
+shuffled_df.to_csv(csv_file_path, index=False)
