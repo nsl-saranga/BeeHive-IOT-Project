@@ -1,0 +1,117 @@
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+ 
+    <title>Admin Panel</title>
+</head>
+<body>
+   <div class="container"> 
+    <div class="topbar">
+        <div class="logo">
+            <h2>Hives</h2>
+        </div>
+        <div class="search">
+            <input type="text" id="search" placeholder="search here">
+            <label for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
+        </div>
+        <i class="fa-solid fa-bell"></i>
+        <div class="user">
+         <img src="{{ url_for('static', filename='images/a.jpg') }}" alt="">
+        </div>
+    </div>
+    <div class="sidebar">
+       <ul>
+          <li>
+            <a href="/">
+                <i class="fa-solid fa-chess-board"></i>
+                <div>Dashboard</div>
+            </a>
+          </li>
+          <li>
+            <a href='/HiveStats'>
+               <i class="fas fa-chart-bar"></i>
+               <div>Analytics</div>
+            </a>
+         </li>
+         <li>
+            <a href='/DailyYield'>
+                <i class="fas fa-chalkboard-teacher"></i>
+               <div>Daily Yield</div>
+            </a>
+         </li>
+        
+      </div>
+    <div class="main">
+      <table class="table table-striped">
+         <tr>
+             <th>Date</th>
+             <th>Average Afternoon Temperature (°C)</th>
+             <th>Average Afternoon Humidity (%)</th>
+             <th>Average Afternoon Rainfall (units)</th>
+             <th>Honey Gathering Amount (kg)</th>
+         </tr>
+         {% for date, data_dict in honey.items() %}
+             <tr>
+                 <td>{{ date }}</td>
+                 <td>{{ data_dict.average_afternoon_temperature }}</td>
+                 <td>{{ data_dict.average_afternoon_humidity }}</td>
+                 <td>{{ data_dict.average_afternoon_rainfall }}</td>
+                 <td {% if data_dict.weight_difference < 0 %} class="negative" {% else %} class="positive" {% endif %}>{{ data_dict.weight_difference }}</td>
+             </tr>
+         {% endfor %}
+     </table>
+
+        
+   
+        
+    
+         
+    
+
+    </div>
+        
+
+        
+
+  
+         
+      
+
+      
+    
+        <!-- <div class="charts">
+          <div class="chart">
+             <h2>Inside temperature variation (last 3 months)</h2>
+             <canvas id="lineChart"></canvas>
+          </div>
+          <div class="chart" id="doughnut-chart">
+            <h2>Production</h2>
+            <canvas id="doughnut"></canvas>
+          </div>
+         </div> 
+        
+      </div>
+    
+   </div> -->
+
+
+   <!-- <script>
+      // Retrieve the binary value from Flask passed to the template
+      var binaryValue = { swarming_alert };
+
+      // Call a function from the external script to handle the logic
+      handleColorChange(binaryValue);
+  </script> -->
+  
+   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+   <script src="{{ url_for('static', filename='chart1.js') }}"></script>
+   <script src="{{ url_for('static', filename='chart2.js') }}"></script>
+   <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+   
+</body>
+</html>

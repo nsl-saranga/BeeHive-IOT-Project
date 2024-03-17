@@ -1,0 +1,100 @@
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+    <title>Admin Panel</title>
+</head>
+<body>
+   <div class="container"> 
+    <div class="topbar">
+        <div class="logo">
+            <h2>Hives</h2>
+        </div>
+        <div class="search">
+            <input type="text" id="search" placeholder="search here">
+            <label for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
+        </div>
+        <i class="fa-solid fa-bell"></i>
+        <div class="user">
+         <img src="{{ url_for('static', filename='images/a.jpg') }}" alt="">
+        </div>
+    </div>
+    <div class="sidebar">
+       <ul>
+          <li>
+            <a href="/">
+                <i class="fa-solid fa-chess-board"></i>
+                <div>Dashboard</div>
+            </a>
+          </li>
+          <li>
+            <a href='/HiveStats'>
+               <i class="fas fa-chart-bar"></i>
+               <div>Analytics</div>
+            </a>
+         </li>
+         <li>
+            <a href='/DailyYield'>
+                <i class="fas fa-chalkboard-teacher"></i>
+               <div>Daily Yield</div>
+            </a>
+         </li>
+        
+      </div>
+
+    <div class="main">
+      <div class="chart-container">
+         
+            <div class="chart">
+               <h2>Temperature Variation</h2>
+               <canvas id="lineChart"></canvas>
+            </div>
+   
+            <div class="chart">
+               <h2>Humidity Variation</h2>
+               <canvas id="lineChart2"></canvas>
+            </div>
+            <!-- <div class="chart" id="doughnut-chart">
+              <h2>Production</h2>
+              <canvas id="doughnut"></canvas>
+            </div> -->
+         
+            <div class="chart">
+               <h2>Frequency Variation</h2>
+               <canvas id="lineChart3"></canvas>
+            </div>
+         
+
+      </div>
+
+     
+      
+        
+      
+   </div>
+
+   <script>
+      var prediction = "{{ graph_data}}"; 
+   // Access the value from Flask
+   </script>
+<!--
+
+   <script>
+      // Retrieve the binary value from Flask passed to the template
+      var binaryValue = { swarming_alert };
+
+      // Call a function from the external script to handle the logic
+      handleColorChange(binaryValue);
+  </script> -->
+  
+  
+   <!-- <script src="{{ url_for('static', filename='chart1.js') }}"></script> --> 
+   <script src="{{ url_for('static', filename='chart2.js') }}"></script>
+   <script src="{{ url_for('static', filename='graphs.js') }}"></script>
+   
+</body>
+</html>

@@ -189,22 +189,28 @@
     color: rgb(215, 188, 8);
 }
 
-/*charts starts here*/
-.charts{
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-gap: 20px;
+.chart-container{
+    display: flex;
+    flex-direction: column;   
+   
     width: 100%;
     padding: 20px;
-    padding-top: 0;
+    margin-top: 0;
+ 
+
 }
+/*charts starts here*/
+
 
 .chart{
+    margin:25px;
+    margin-top: 8px;
+ 
     background:#fff ;
-    padding: 20px;
+    padding: 20px; 
     border-radius: 10px;
     box-shadow:0 7px 25px rgba(0,0,0,0.08);
-    width: 100%;
+    /* width: 100%;  */
 }
 
 .chart h2{
@@ -358,4 +364,26 @@
 
 .live_tag{
     margin-left: 2em;
+}
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 8px;
+  }
+  
+  th {background-color:rgb(215, 188, 8);}
+  tr {background-color:rgb(238, 236, 192);}
+
+  .negative {
+    color: red;
+    font-weight: bolder;
+}
+.positive {
+    color: green;
+    font-weight: bolder;
 }
