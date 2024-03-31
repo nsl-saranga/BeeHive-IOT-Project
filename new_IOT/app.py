@@ -6,6 +6,7 @@ import pickle
 import json
 from datetime import datetime
 import math
+import experiment  # experiment data for daily yield. 
 
 app = Flask(__name__)
 
@@ -89,6 +90,9 @@ def get_live_data():
     live_in_temperature = latest_data_values.get("inside_temperature")
     live_in_hum = latest_data_values.get("inside_humidity")
     live_freq = latest_data_values.get("frequency")
+    live_co = latest_data_values.get("co")
+    live_weight = latest_data_values.get("weight")
+    live_rain = latest_data_values.get("rainfall")
 
     # Return a dictionary containing the extracted values
     return {
@@ -96,8 +100,12 @@ def get_live_data():
         "live_out_humidity": live_out_hum,
         "live_in_temperature": live_in_temperature,
         "live_in_humidity": live_in_hum,
-        "live_frequency": live_freq
+        "live_frequency": live_freq,
+        "live_co": live_co,
+        "live_weight": live_weight,
+        "live_rain": live_rain
     }
+
 
 def calculate_harvest():
     # Assuming the data is stored in '/UsersData/X3dJJfbdJGRYA9WcYi7dun8I0cp2/readings'
@@ -109,63 +117,55 @@ def calculate_harvest():
     if not latest_data:
         return None  # Handle the case when there is no data
 
-    # Extract temperature values from the dictionary
-    temperature_values = [float(value.get("outside_temperature")) for value in latest_data.values()]
+    # Extract weight values from the dictionary
+    weight_values = [float(value.get("weight")) for value in latest_data.values()]
 
-    # Calculate average temperature
-    if temperature_values:
-        average_temperature = sum(temperature_values) / len(temperature_values)
-        return average_temperature
+    # Calculate average weight
+    if weight_values:
+        average_weight = sum(weight_values) / len(weight_values)
+        return average_weight
     else:
         return None  # Handle the case when there are no temperature values
+
+
+
+def calculate_extreme():
+     # Assuming the data is stored in '/UsersData/X3dJJfbdJGRYA9WcYi7dun8I0cp2/readings'
+    harvest_ref = db.reference("/UsersData/X3dJJfbdJGRYA9WcYi7dun8I0cp2/readings")
+
+    # Retrieve the latest 5 records
+    latest_data = harvest_ref.order_by_key().limit_to_last(5).get()
+
+    if not latest_data:
+        return None  # Handle the case when there is no data
+
+    # Extract weight values from the dictionary
+    temp_values = [float(value.get("outside_temperature")) for value in latest_data.values()]
+
+    # Calculate average weight
+    if temp_values:
+        average_temp = sum(temp_values) / len(temp_values)
+        return average_temp
+    else:
+        return None  # Handle the case when there are no temperature values
+
+
 
 with open('models/svm_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
+
 def get_graph_data():
   # Retrieve the latest data (e.g., the last 10 records)
-    latest_data = ref.order_by_key().limit_to_last(10).get()
+    latest_data = ref.order_by_key().limit_to_last(15).get()
 
     # Convert the data to an array for easier serialization
-    array = [{"timestamp": key, "outside_temperature": value.get("outside_temperature"),"outside_humidity": value.get("outside_humidity"),"frequency": value.get("frequency")} for key, value in latest_data.items()]
+    array = [{"timestamp": key, "outside_temperature": value.get("outside_temperature"), "inside_temperature": value.get("inside_temperature"),"outside_humidity": value.get("outside_humidity"),"inside_humidity": value.get("inside_humidity"),"frequency": value.get("frequency"),"weight": value.get("weight"),"co2": value.get("co")} for key, value in latest_data.items()]
 
     return (array)
 
-def daily_yeield():
-  
-    data = [
-    ("2024-03-13 05:00:00", 42.5, 20, 60, 15),  # (Timestamp, Weight, Rainfall, Outside Humidity, Outside Temperature)
-    ("2024-03-13 05:30:00", 42.7, 20, 62, 15),
-    ("2024-03-13 06:00:00", 43.0, 20, 64, 16),
-    ("2024-03-13 06:30:00", 43.3, 20, 65, 16),
-    ("2024-03-13 07:00:00", 43.5, 20, 66, 17),
-    ("2024-03-13 07:30:00", 43.7, 20, 67, 17),
-    ("2024-03-13 08:00:00", 44.0, 20, 68, 18),
-    ("2024-03-13 08:30:00", math.nan, 20, 69, 18),  # Example NaN value
-    ("2024-03-13 09:00:00", 44.5, 20, 70, 19),
-    ("2024-03-13 09:30:00", 44.8, 20, 71, 19),
-    ("2024-03-13 10:00:00", 45.0, 20, 72, 20),
-    ("2024-03-13 10:30:00", 45.2, 20, 73, 20),
-    ("2024-03-13 11:00:00", 45.5, 20, 74, 21),
-    ("2024-03-13 11:30:00", 45.8, 20, 75, 21),
-    ("2024-03-13 12:00:00", 46.0, 20, 76, 22),
-    ("2024-03-13 12:30:00", 46.2, 20, 77, 22),
-    ("2024-03-13 13:00:00", 46.5, 20, 78, 23),
-    ("2024-03-13 13:30:00", 46.8, 20, 79, 23),
-    ("2024-03-13 14:00:00", 47.0, 20, 80, 24),
-    ("2024-03-13 14:30:00", 47.2, 20, 81, 24),
-    ("2024-03-13 15:00:00", 47.5, 20, 82, 25),
-    ("2024-03-13 15:30:00", 47.8, 20, 83, 25),
-    ("2024-03-13 16:00:00", 48.0, 20, 84, 26),
-    ("2024-03-13 16:30:00", 48.2, 20, 85, 26),
-    ("2024-03-13 17:00:00", 48.5, 20, 86, 27),
-    ("2024-03-13 17:30:00", 48.7, 20, 87, 27),
-    ("2024-03-13 18:00:00", 49.0, 20, 88, 28),
-    ("2024-03-13 18:30:00", 49.2, 20, 89, 28),
-    ("2024-03-13 19:00:00", 49.5, 20, 90, 29),
-    ("2024-03-13 19:30:00", 49.8, 20, 91, 29)
-    ]
-
+def daily_yield():
+    data = experiment.get_data()
     daily_data = {}
 
     for timestamp, weight, rainfall, humidity, temperature in data:
@@ -177,7 +177,7 @@ def daily_yeield():
                 daily_data[date] = {'morning_weight': None, 'evening_weight': None, 'afternoon_temperature': [], 'afternoon_humidity': [], 'afternoon_rainfall': []}
 
             hour = int(timestamp.split()[1].split(":")[0])
-            
+
             # Check if morning weight
             if hour < 6:
                 daily_data[date]['morning_weight'] = weight
@@ -205,17 +205,17 @@ def daily_yeield():
         afternoon_rainfall = data_dict['afternoon_rainfall']
 
         if afternoon_temperature:
-            data_dict['average_afternoon_temperature'] = sum(afternoon_temperature) / len(afternoon_temperature)
+            data_dict['average_afternoon_temperature'] = round(sum(afternoon_temperature) / len(afternoon_temperature), 3)
         else:
             data_dict['average_afternoon_temperature'] = None
 
         if afternoon_humidity:
-            data_dict['average_afternoon_humidity'] = sum(afternoon_humidity) / len(afternoon_humidity)
+            data_dict['average_afternoon_humidity'] = round(sum(afternoon_humidity) / len(afternoon_humidity), 3)
         else:
             data_dict['average_afternoon_humidity'] = None
 
         if afternoon_rainfall:
-            data_dict['average_afternoon_rainfall'] = sum(afternoon_rainfall) / len(afternoon_rainfall)
+            data_dict['average_afternoon_rainfall'] = round(sum(afternoon_rainfall) / len(afternoon_rainfall), 3)
         else:
             data_dict['average_afternoon_rainfall'] = None
 
@@ -231,6 +231,8 @@ def index():
     average_freq_value = detect_swarming()
     average_rain_value = feeding_need()
     live_data = get_live_data()
+    average_harvest_value = calculate_harvest()
+    extreme_temp_value = calculate_extreme()
 
     in_temp = live_data["live_out_temperature"]
     in_hum = live_data["live_out_humidity"]
@@ -251,7 +253,7 @@ def index():
     rounded_average_freq = round(average_freq_value, 3)
     rounded_average_rain = round(average_rain_value, 3)
 
-    return render_template('index.html', swarming_alert=rounded_average_freq, feeding_need=rounded_average_rain, live_data=live_data, prediction= prediction)
+    return render_template('index.html', harvest_alert=average_harvest_value, extreme_alert=extreme_temp_value, swarming_alert=rounded_average_freq, feeding_need=rounded_average_rain, live_data=live_data, prediction= prediction)
 
 @app.route('/HiveStats')
 def page1():
@@ -260,19 +262,31 @@ def page1():
 
 @app.route('/DailyYield')
 def page2():
-    honey = daily_yeield()
+    honey = daily_yield()
     return render_template('dailyYield.html',honey=honey)
 
-@app.route('/api/data', methods=['GET'])
-def get_data_api():
-    # Retrieving data from readings node
-    # Retrieve the latest data (e.g., the last 10 records)
-    latest_data = ref.order_by_key().limit_to_last(10).get()
+@app.route('/api/live_data', methods=['GET'])
+def get_live_data_api():
+    # Retrieve live data
+    latest_data = get_live_data()  # Assuming this function retrieves live data
+    
+    # Convert the dictionary to JSON
+    json_data = jsonify(latest_data)
+    
+    # Return the JSON data
+    return json_data
 
-    # Convert the data to an array for easier serialization
-    temperature_array = [{"timestamp": key, "outside_temperature": value.get("outside_temperature")} for key, value in latest_data.items()]
-
-    return jsonify({temperature_array})
+@app.route('/api/timely_data', methods=['GET'])
+def get_timely_data_api():
+    # Retrieve graph data
+    graph_data = get_graph_data()  # Assuming this function retrieves graph data
+    
+    # Convert the dictionary to JSON
+    json_data = jsonify(graph_data)
+    
+    # Return the JSON data
+    return json_data
+    
 
 if __name__ == '__main__':
     app.run(debug=True)

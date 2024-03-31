@@ -14,8 +14,8 @@
             <h2>Hives</h2>
         </div>
         <div class="search">
-            <input type="text" id="search" placeholder="search here">
-            <label for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
+            <!-- <input type="text" id="search" placeholder="search here"> -->
+            <!-- <label for="search"><i class="fa-solid fa-magnifying-glass"></i></label> -->
         </div>
         <i class="fa-solid fa-bell"></i>
         <div class="user">
@@ -46,15 +46,14 @@
       </div>
     <div class="main">
         <div class="cards">
-            <div class="card">
+            <div class="card" id="harvest_card" data-harvest-alert="{{ harvest_alert }}">
                <div class="card-content">
-                  <div class="number">{{swarming_alert}}</div>
-                  <div class="card-name">Harvest</div>
+                  <div class="card-name" id="harvest_card_name"></div>
                </div>
-               <div class="icon-box">
-                 <i class="fa-regular fa-triangle-exclamation"></i>
+               <div class="icon-box" id="harvest_card_icon">
                </div>
             </div>
+            
             <div class="card" id="swarm_card" data-swarming-alert="{{ swarming_alert }}">
                <div class="card-content">
                    <div class="card-name" id="swarm_card_name"></div>
@@ -79,13 +78,11 @@
                </div>
             </div>
 
-            <div class="card">
+            <div class="card" id="extreme_card" data-harvest-alert="{{ extreme_alert }}">
                <div class="card-content">
-                  <div class="number">0</div>
-                  <div class="card-name">{{ prediction[0]}}</div>
+                  <div class="card-name" id="extreme_card_name"></div>
                </div>
-               <div class="icon-box">
-                  <i class="fa-light fa-honey-pot"></i>
+               <div class="icon-box" id="extreme_card_icon">
                </div>
             </div>
         </div>
@@ -170,6 +167,7 @@
   </script> -->
    <script>
       var prediction = "{{ prediction[0] }}"; 
+      var Weight = "{{ live_data.live_weight }}";
    // Access the value from Flask
    </script>
    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
